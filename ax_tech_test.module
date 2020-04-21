@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Contains ax_tech_test.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+
+
+/**
+ * Implements hook_help().
+ */
+function ax_tech_test_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ax_tech_test module.
+    case 'help.page.ax_tech_test':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Tech Test') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+
+/**
+ * callback action on submit (custom method plus bas)
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function ax_tech_test_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+    if ($form_id == 'system_site_information_settings') {
+        $config = \Drupal::service('config.factory')->getEditable('ax_tech_test.siteapikey');
+        $defaultValue = $config->get('siteapikey');
+        if(empty($defaultValue)){
+            $defaultValue = '';
+        }
+        $form['siteapikey'] = array(
+            '#type' => 'textfield',
+            '#title' => 'Site API KEY',
+            '#default_value' => $defaultValue,
+            '#size' => 60,
+            '#maxlength' => 128,
+            '#required' => TRUE,
+        );
+        $form['#submit'][] = 'ax_tech_test_form_submit';
+        $form["actions"]["submit"]["#value"] = 'Update Configuration';
+
+    }
+}
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function ax_tech_test_form_submit(array &$form, FormStateInterface $form_state) {
+
+    $siteApiKey = $form_state->getValue(array('siteapikey'));
+    $config = \Drupal::service('config.factory')->getEditable('ax_tech_test.siteapikey');
+    $config->set('siteapikey',$siteApiKey)->save();
+}

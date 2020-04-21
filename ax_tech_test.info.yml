@@ -1,0 +1,5 @@
+name: 'ax_tech_test'
+type: module
+description: 'Tech Test'
+core: 8.x
+package: 'Custom'

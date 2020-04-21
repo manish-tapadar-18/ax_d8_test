@@ -1,0 +1,11 @@
+services:
+  site api key missing:
+    class: Drupal\ax_tech_test\EventSubscriber\ApiKeyMissing
+    arguments: []
+    tags:
+      - { name: event_subscriber }
+  api_key_missing:
+    class: Drupal\ax_tech_test\EventSubscriber\ApiKeyMissing
+    arguments: []
+    tags:
+      - { name: event_subscriber }
